@@ -98,6 +98,7 @@ int filedump(const char *filename){
 }
 
 void ps_command(int n, char *argv[]){
+
 	signed char buf[1024];
 	vTaskList(buf);
         fio_printf(1, "\n\rName          State   Priority  Stack  Num\n\r");
@@ -164,7 +165,25 @@ void test_command(int n, char *argv[]) {
     int handle;
     int error;
 
-    fio_printf(1, "\r\n");
+	if(n > 1){
+		if(!strcmp(argv[1],"-fibonacci")){
+			int fib_index=0, i, j=1;
+			for(i=strlen(argv[2])-1; i>=0; i--){
+				fib_index  += (int)(argv[2][i] - '0')*j;
+				j *= 10;
+			}
+			int prev = 1, cur = 0;
+			 i = 0;
+			for(i=0; i<fib_index; i++){
+				cur = prev + cur;
+				prev = cur - prev;
+			}
+			fio_printf(1, "\r\nthe %dth fibonacci number is %d\r\n",fib_index,cur);
+			return;
+		}
+	}
+
+    fio_printf(1, "test\r\n");
     
     handle = host_action(SYS_SYSTEM, "mkdir -p output");
     handle = host_action(SYS_SYSTEM, "touch output/syslog");
