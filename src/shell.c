@@ -24,6 +24,7 @@ void help_command(int, char **);
 void host_command(int, char **);
 void mmtest_command(int, char **);
 void test_command(int, char **);
+void new_command(int, char **);
 void _command(int, char **);
 
 #define MKCL(n, d) {.name=#n, .fptr=n ## _command, .desc=d}
@@ -37,6 +38,7 @@ cmdlist cl[]={
 	MKCL(mmtest, "heap memory allocation test"),
 	MKCL(help, "help"),
 	MKCL(test, "test new function"),
+	MKCL(new, "create new tasks"),
 	MKCL(, ""),
 };
 
@@ -203,6 +205,27 @@ void test_command(int n, char *argv[]) {
     }
 
     host_action(SYS_CLOSE, handle);
+}
+
+void new_task(void *pvParameters){
+	while(1){
+	}
+	return;
+}
+
+void new_command(int n, char *argv[]){
+	
+	if(n>1){
+		xTaskCreate(new_task,
+			(signed portCHAR *) argv[1],
+			128 /* stack size */, NULL, tskIDLE_PRIORITY + 2, NULL);
+	}
+	else{
+		xTaskCreate(new_task,
+            (signed portCHAR *) "QWQ",
+            128 /* stack size */, NULL, tskIDLE_PRIORITY + 2, NULL);
+	}
+	return;
 }
 
 void _command(int n, char *argv[]){
